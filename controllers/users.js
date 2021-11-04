@@ -67,6 +67,22 @@ module.exports.loginUser = async (req, res) => {
     }
 }
 
+module.exports.getUserInformation = async (req, res) => {
+    try {
+        const username = req.user.username
+        const user = await User.findByPk(username)
+        delete user.dataValues.password
+        res.status(200).json({
+            username: user.dataValues.username,
+            commentary: user.dataValues.commentary,
+            roleName: user.dataValues.roleName
+        })
+    } catch (error) {
+        const status = res.statusCode ? res.statusCode : 500
+        res.status(status).json({ errors: { body: ['Cannot check user', e.message] } })
+    }
+}
+
 const properUsersData = (getUsers) => {
     let users = []
     for (const getUser of getUsers) {
