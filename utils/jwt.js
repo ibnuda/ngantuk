@@ -6,7 +6,7 @@ module.exports.sign = async (user) => {
         jwt.sign({
             username: user.username,
             commentary: user.commentary,
-            rolename: user.rolename,
+            roleName: user.roleName,
         }, JWT_SECRET, (err, token) => {
             if (err)
                 return reject(err)

@@ -18,11 +18,13 @@ module.exports.createUser = async (req, res) => {
             username: req.body.username,
             password: password,
             commentary: req.body.commentary,
+            roleName: null
         })
 
         if (user) {
-            if (user.dataValues.password)
+            if (user.dataValues.password) {
                 delete user.dataValues.password
+            }
             user.dataValues.token = await sign(user)
             res.status(201).json({ user })
         }
@@ -55,7 +57,7 @@ module.exports.loginUser = async (req, res) => {
         user.dataValues.token = await sign({
             username: user.dataValues.username,
             commentary: user.dataValues.commentary,
-            rolename: user.dataValues.rolename
+            roleName: user.dataValues.roleName
         })
 
         res.status(200).json({ user })

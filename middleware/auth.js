@@ -17,12 +17,12 @@ module.exports.authByToken = async (req, res, next) => {
     const token = authHeader[1];
     try {
         const user = await decode(token)
-        // console.log(user)
+        console.log(user)
         if (!user) {
             throw new Error('No user found in token')
         }
         req.user = user
-        if (user.roleName == null) {
+        if (user.roleName != 'admin') {
             throw new Error('Not allowed to access it')
         }
         return next()
