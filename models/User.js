@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize')
+const { DataTypes, STRING } = require('sequelize')
 const sequelize = require('../dbCon')
 
 const User = sequelize.define('user', {
@@ -14,7 +14,7 @@ const User = sequelize.define('user', {
     commentary: {
         type: DataTypes.STRING,
         allowNull: true
-    }
+    },
 }, {
     timestamps: false
 })

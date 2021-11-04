@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize')
 const sequelize = require('../dbCon')
 
 const Role = sequelize.define('role', {
-    rolename: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true

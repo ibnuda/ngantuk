@@ -5,7 +5,8 @@ module.exports.sign = async (user) => {
     return new Promise((resolve, reject) => {
         jwt.sign({
             username: user.username,
-            email: user.email
+            commentary: user.commentary,
+            rolename: user.rolename,
         }, JWT_SECRET, (err, token) => {
             if (err)
                 return reject(err)

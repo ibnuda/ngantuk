@@ -11,7 +11,7 @@ const sequelize = new Sequelize('ngantuk', 'iaji', 'jaran', {
 const checkConnection = async () => {
     try {
         await sequelize.authenticate();
-        console.log('connection has been established successfully.');
+        console.log('connected to db');
     } catch (error) {
         console.error('unable to connect to the database:', error);
     }

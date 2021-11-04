@@ -4,9 +4,11 @@
   "description": "ngantuk ges",
   "main": "index.js",
   "author": "ibnuda",
-  "license": "AGPLv3",
+  "license": "MIT",
   "scripts": {
-    "run": "nodemon index.js"
+    "monitor": "nodemon index.js",
+    "teardown": "psql -U iaji -d ngantuk -f sqls/teardown.sql",
+    "buildup": "psql -U iaji -d ngantuk -f sqls/buildup.sql"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

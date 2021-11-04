@@ -5,18 +5,19 @@ const { sign, decode } = require('../utils/jwt')
 
 module.exports.createUser = async (req, res) => {
     try {
-        if (!req.body.user.username) throw new Error("username is required")
-        if (!req.body.user.password) throw new Error("password is required")
+        if (!req.body.username) throw new Error("username is required")
+        if (!req.body.password) throw new Error("password is required")
 
-        const existingUser = await User.findByPk(req.body.user.username)
-        if (existingUser)
+        const existingUser = await User.findByPk(req.body.username)
+        if (existingUser) {
             throw new Error('user aldready exists with this username id')
+        }
 
-        const password = await hashPassword(req.body.user.password);
+        const password = await hashPassword(req.body.password);
         const user = await User.create({
-            username: req.body.user.username,
+            username: req.body.username,
             password: password,
-            commentary: req.body.user.commentary,
+            commentary: req.body.commentary,
         })
 
         if (user) {
@@ -32,10 +33,10 @@ module.exports.createUser = async (req, res) => {
 
 module.exports.loginUser = async (req, res) => {
     try {
-        if (!req.body.user.username) throw new Error('Username is Required')
-        if (!req.body.user.password) throw new Error('Password is Required')
+        if (!req.body.username) throw new Error('Username is Required')
+        if (!req.body.password) throw new Error('Password is Required')
 
-        const user = await User.findByPk(req.body.user.username)
+        const user = await User.findByPk(req.body.username)
 
         if (!user) {
             res.status(401)
@@ -43,7 +44,7 @@ module.exports.loginUser = async (req, res) => {
         }
 
         //Check if password matches
-        const passwordMatch = await matchPassword(user.password, req.body.user.password)
+        const passwordMatch = await matchPassword(user.password, req.body.password)
 
         if (!passwordMatch) {
             res.status(401)
@@ -51,12 +52,45 @@ module.exports.loginUser = async (req, res) => {
         }
 
         delete user.dataValues.password
-        user.dataValues.token = await sign({ email: user.dataValues.email, username: user.dataValues.username })
+        user.dataValues.token = await sign({
+            username: user.dataValues.username,
+            commentary: user.dataValues.commentary,
+            rolename: user.dataValues.rolename
+        })
 
         res.status(200).json({ user })
     } catch (e) {
         const status = res.statusCode ? res.statusCode : 500
-        res.status(status).json({ errors: { body: ['Could not create user ', e.message] } })
+        res.status(status).json({ errors: { body: ['Cannot check user', e.message] } })
+    }
+}
+
+const properUsersData = (getUsers) => {
+    let users = []
+    console.log(`===========`)
+    console.log(`===========`)
+    for (const getUser of getUsers) {
+        console.log(getUser)
+        const username = getUser.dataValues.username
+        const commentary = getUser.dataValues.commentary
+        const roleName = getUser.dataValues.roleName
+        users.push({
+            username: username,
+            commentary: commentary,
+            roleName: roleName
+        })
+    }
+    return users
+}
+
+module.exports.getAllUsers = async (req, res) => {
+    try {
+        const getUsers = await User.findAll();
+        console.log(getUsers)
+        const users = properUsersData(getUsers)
+        res.status(200).json({ users })
+    } catch (e) {
+        res.status(422).json({ errors: { body: [e.message] } })
     }
 }
 
@@ -78,7 +112,7 @@ module.exports.getUserByUsername = async (req, res) => {
 
 module.exports.updateUserDetails = async (req, res) => {
     try {
-        const user = await User.findByPk(req.user.username)
+        const user = await User.findByPk(req.username)
 
         if (!user) {
             res.status(401)
@@ -86,8 +120,9 @@ module.exports.updateUserDetails = async (req, res) => {
         }
 
         if (req.body.user) {
-            const username = req.body.user.username ? req.body.user.username : user.username
-            const commentary = req.body.user.commentary ? req.body.user.commentary : user.commentary
+            const username = req.body.username ? req.body.username : user.username
+            const commentary = req.body.commentary ? req.body.commentary : user.commentary
+            const rolename = req.body.roleName ? req.body.roleName : user.roleName
             let password = user.password
             if (req.body.user.password)
                 password = await hashPassword(req.body.user.password)
