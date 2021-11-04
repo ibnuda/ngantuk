@@ -148,17 +148,20 @@ module.exports.updateUserDetails = async (req, res) => {
 
 module.exports.deleteUserByUsername = async (req, res) => {
     try {
-        const deleter = await User.findByPk(req)
+        const { username } = req.params
         const user = await User.findByPk(username)
 
         if (!user) {
-            res.status(404)
-            throw new Error('user not found')
+            res.status(404);
+            throw new Error('user not found');
         }
+
+        await User.destroy({ where: { username: username } })
+        res.status(200).json({ message: 'user deleted successfully' });
     } catch (e) {
         const code = res.statusCode ? res.statusCode : 422;
         return res.status(code).json({
-            errors: { body: ['Could not delete article', e.message] },
+            errors: { body: ['could not delete user', e.message] },
         });
     }
 }

@@ -9,5 +9,6 @@ router.get('/users/:username', authAdminByToken, UserController.getUserByUsernam
 router.post('/users', UserController.createUser)
 router.post('/users/login', UserController.loginUser)
 router.put('/users/:username', authAdminByToken, UserController.updateUserDetails)
+router.delete('/users/:username', authAdminByToken, UserController.deleteUserByUsername)
 
 module.exports = router
