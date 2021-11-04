@@ -1,11 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const UserController = require('../controllers/users')
-const { authByToken } = require('../middleware/auth')
+const { authByToken, authAdminByToken } = require('../middleware/auth')
 
-router.get('/users', authByToken, UserController.getAllUsers)
+router.get('/user', authByToken)
+router.get('/users', authAdminByToken, UserController.getAllUsers)
+router.get('/users/:username', authAdminByToken, UserController.getUserByUsername)
 router.post('/users', UserController.createUser)
 router.post('/users/login', UserController.loginUser)
-router.patch('/user', authByToken, UserController.updateUserDetails)
+router.put('/users/:username', authAdminByToken, UserController.updateUserDetails)
 
 module.exports = router

@@ -69,10 +69,7 @@ module.exports.loginUser = async (req, res) => {
 
 const properUsersData = (getUsers) => {
     let users = []
-    console.log(`===========`)
-    console.log(`===========`)
     for (const getUser of getUsers) {
-        console.log(getUser)
         const username = getUser.dataValues.username
         const commentary = getUser.dataValues.commentary
         const roleName = getUser.dataValues.roleName
@@ -88,7 +85,6 @@ const properUsersData = (getUsers) => {
 module.exports.getAllUsers = async (req, res) => {
     try {
         const getUsers = await User.findAll();
-        console.log(getUsers)
         const users = properUsersData(getUsers)
         res.status(200).json({ users })
     } catch (e) {
@@ -98,7 +94,8 @@ module.exports.getAllUsers = async (req, res) => {
 
 module.exports.getUserByUsername = async (req, res) => {
     try {
-        const user = await User.findByPk(req.user.username)
+        const { username } = req.params;
+        const user = await User.findByPk(username)
         if (!user) {
             throw new Error('No such user found')
         }
@@ -114,28 +111,30 @@ module.exports.getUserByUsername = async (req, res) => {
 
 module.exports.updateUserDetails = async (req, res) => {
     try {
-        const user = await User.findByPk(req.username)
-
+        const { username } = req.params;
+        const user = await User.findByPk(username)
         if (!user) {
             res.status(401)
             throw new Error('No user with this username')
         }
 
-        if (req.body.user) {
-            const username = req.body.username ? req.body.username : user.username
-            const commentary = req.body.commentary ? req.body.commentary : user.commentary
-            const rolename = req.body.roleName ? req.body.roleName : user.roleName
-            let password = user.password
-            if (req.body.user.password)
-                password = await hashPassword(req.body.user.password)
+        if (req.body) {
+            const commentary = req.body.commentary ? req.body.commentary : user.dataValues.commentary
+            const roleName = req.body.roleName ? req.body.roleName : user.dataValues.roleName
+            if (req.body.password) {
+                hashedPass = await hashPassword(req.body.user.password)
+            }
+            const password = req.body.password ? hashedPass : user.dataValues.password
 
-            const updatedUser = await user.update({ username, password, commentary })
+            const updatedUser = await user.update({
+                commentary: commentary,
+                password: password,
+                roleName: roleName,
+            })
             delete updatedUser.dataValues.password
-            updatedUser.dataValues.token = req.header('Authorization').split(' ')[1]
             res.json(updatedUser)
         } else {
             delete user.dataValues.password
-            user.dataValues.token = req.header('Authorization').split(' ')[1]
             res.json(user)
         }
 

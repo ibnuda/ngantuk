@@ -1,6 +1,6 @@
 const { decode } = require('../utils/jwt')
 
-module.exports.authByToken = async (req, res, next) => {
+const auth = async (req, res) => {
     //Check for Authorization header
     const authHeader = req.header('Authorization') ? req.header('Authorization').split(' ') : null
     if (!authHeader) {
@@ -15,9 +15,28 @@ module.exports.authByToken = async (req, res, next) => {
         })
     //Check if token is valid
     const token = authHeader[1];
+    const decodedToken = await decode(token)
+    return decodedToken
+}
+
+module.exports.authByToken = async (req, res, next) => {
     try {
-        const user = await decode(token)
-        console.log(user)
+        const user = await auth(req, res)
+        if (!user) {
+            throw new Error('No user found in token')
+        }
+        req.user = user
+        return next()
+    } catch (e) {
+        return res.status(401).json({
+            errors: { body: ['Authorization failed', e.message] }
+        })
+    }
+}
+
+module.exports.authAdminByToken = async (req, res, next) => {
+    try {
+        const user = await auth(req, res)
         if (!user) {
             throw new Error('No user found in token')
         }
