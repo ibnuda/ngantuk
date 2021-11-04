@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
+const swaggerUi = require('swagger-ui-express')
 
+const swaggerDocument = require('./swagger.json');
 const sequelize = require('./dbCon')
 const { notFound, errorHandler } = require('./middleware/errorHandler')
 const User = require('./models/User')
@@ -41,6 +43,7 @@ const sync = async () => await sequelize.sync({ alter: true })
 sync().then(setupRoles).then(setupAdmin)
 
 app.use(express.json())
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.get('/', (req, res) => {
     res.json({ status: "it is running" });

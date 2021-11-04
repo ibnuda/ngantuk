@@ -29,7 +29,8 @@ module.exports.createUser = async (req, res) => {
             res.status(201).json({ user })
         }
     } catch (e) {
-        res.status(422).json({ errors: { body: ['Could not create user ', e.message] } })
+        const status = res.statusCode ? res.statusCode : 500
+        res.status(status).json({ error: ['Could not create user ', e.message] })
     }
 }
 
@@ -41,7 +42,7 @@ module.exports.loginUser = async (req, res) => {
         const user = await User.findByPk(req.body.username)
 
         if (!user) {
-            res.status(401)
+            res.status(404)
             throw new Error('No User with this username')
         }
 
@@ -63,7 +64,7 @@ module.exports.loginUser = async (req, res) => {
         res.status(200).json({ user })
     } catch (e) {
         const status = res.statusCode ? res.statusCode : 500
-        res.status(status).json({ errors: { body: ['Cannot check user', e.message] } })
+        res.status(status).json({ error: ['Cannot check user', e.message] })
     }
 }
 
@@ -79,7 +80,7 @@ module.exports.getUserInformation = async (req, res) => {
         })
     } catch (error) {
         const status = res.statusCode ? res.statusCode : 500
-        res.status(status).json({ errors: { body: ['Cannot check user', e.message] } })
+        res.status(status).json({ errors: ['cannot check user', error.message] })
     }
 }
 
@@ -104,7 +105,8 @@ module.exports.getAllUsers = async (req, res) => {
         const users = properUsersData(getUsers)
         res.status(200).json({ users })
     } catch (e) {
-        res.status(422).json({ errors: { body: [e.message] } })
+        const code = res.statusCode ? res.statusCode : 422;
+        res.status(code).json({ error: [e.message] })
     }
 }
 
@@ -119,9 +121,8 @@ module.exports.getUserByUsername = async (req, res) => {
         user.dataValues.token = req.header('Authorization').split(' ')[1]
         return res.status(200).json({ user })
     } catch (e) {
-        return res.status(404).json({
-            errors: { body: [e.message] }
-        })
+        const code = res.statusCode ? res.statusCode : 422;
+        return res.status(code).json({ error: [e.message] })
     }
 }
 

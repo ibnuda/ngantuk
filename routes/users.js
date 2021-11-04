@@ -4,20 +4,6 @@ const router = express.Router()
 const UserController = require('../controllers/users')
 const { authByToken, authAdminByToken } = require('../middleware/auth')
 
-/**
- * @openapi
- * /api/user:
- *   get:
- *     description: Get information about current user
- *     responses:
- *       200:
- *         description: information of current user
- *         content:
- *           application/json
- *           schema:
- *       401:
- *         description
- */
 router.get('/user', authByToken, UserController.getUserInformation)
 router.get('/users', authAdminByToken, UserController.getAllUsers)
 router.get('/users/:username', authAdminByToken, UserController.getUserByUsername)
