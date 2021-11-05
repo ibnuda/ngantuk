@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngantuk
+spec:
+  selector:
+    matchLabels:
+      app: ngantuk
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: ngantuk
+        tier: backend
+    spec:
+      containers:
+        - name: app
+          image: ngantuk:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PG_HOST
+              value: "postgres-master.default"

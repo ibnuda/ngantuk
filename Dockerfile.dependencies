@@ -1,0 +1,8 @@
+FROM node:16.13-alpine3.14
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY package.json /usr/src/app/
+COPY swagger.json /usr/src/app/
+RUN npm install

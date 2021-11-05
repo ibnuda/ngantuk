@@ -1,0 +1,20 @@
+version: "3"
+services:
+  api:
+    image: ngantuk
+    ports:
+      - 3000:3000
+    links:
+      - postgres
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:13.4-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=iaji
+      - POSTGRES_PASSWORD=jaran
+      - POSTGRES_DB=ngantuk

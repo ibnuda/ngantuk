@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  default.conf: |
+    upstream backend {
+      # DNS SRV is only supported by nginx-plus :(
+      # server app-service.default service=_app._tcp resolve max_fails=0;
+      server ngantuk.default:3000 max_fails=0;
+    }
+
+    server {
+            listen 80 default_server;
+            listen [::]:80 default_server;
+            server_name localhost;
+
+            location / {
+                    proxy_pass http://backend;
+            }
+    }
+metadata:
+  name: nginx
