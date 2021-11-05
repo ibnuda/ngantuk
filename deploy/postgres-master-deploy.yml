@@ -18,7 +18,11 @@ spec:
           ports:
             - containerPort: 5432
           env:  # TODO: Use configmap/secrets
+            - name: POSTGRES_USER
+              value: "iaji"
             - name: POSTGRES_PASSWORD
               value: "jaran"
             - name: POSTGRES_DB
               value: "ngantuk"
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: "trust"
