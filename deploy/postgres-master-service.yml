@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-master
+  name: postgres-ngantuk
 spec:
   ports:
     - name: db
@@ -9,5 +9,5 @@ spec:
       port: 5432
       targetPort: 5432
   selector:
-    app: postgres-master
+    app: postgres-ngantuk
     tier: backend

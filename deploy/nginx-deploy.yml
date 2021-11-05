@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: nginx
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -19,16 +19,10 @@ spec:
           ports:
             - containerPort: 80
           volumeMounts:
-            - name: secrets-volume
-              mountPath: /etc/nginx/ssl
-              readOnly: true
             - name: configmap-volume
               mountPath: /etc/nginx/conf.d
               readOnly: true
       volumes:
-        - name: secrets-volume
-          secret:
-            secretName: nginx
         - name: configmap-volume
           configMap:
             name: nginx

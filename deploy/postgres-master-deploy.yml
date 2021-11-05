@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-master
+  name: postgres-ngantuk
 spec:
   selector:
     matchLabels:
-      app: postgres-master
+      app: postgres-ngantuk
   template:
     metadata:
       labels:
-        app: postgres-master
+        app: postgres-ngantuk
         tier: backend
     spec:
       containers:
-        - name: postgres-master
+        - name: postgres-ngantuk
           image: postgres:13.4-alpine
           ports:
             - containerPort: 5432
