@@ -55,13 +55,18 @@ module.exports.loginUser = async (req, res) => {
         }
 
         delete user.dataValues.password
-        user.dataValues.token = await sign({
+        token = await sign({
             username: user.dataValues.username,
             commentary: user.dataValues.commentary,
             roleName: user.dataValues.roleName
         })
 
-        res.status(200).json({ user })
+        res.status(200).json({
+            username: user.dataValues.username,
+            commentary: user.dataValues.commentary,
+            roleName: user.dataValues.roleName,
+            token: token
+        })
     } catch (e) {
         const status = res.statusCode ? res.statusCode : 500
         res.status(status).json({ error: ['Cannot check user', e.message] })

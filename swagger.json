@@ -33,7 +33,7 @@
                 "summary": "Get current user",
                 "description": "Gets the currently logged-in user",
                 "tags": [
-                    "User information"
+                    "User Information"
                 ],
                 "security": [
                     {
@@ -45,16 +45,242 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "properties": {
-                                "username": {"type": "string"},
-                                "commentary": {"type": "string"},
-                                "roleName": {"type": "string"}
-                            }
+                            "$ref": "#/definitions/userinformation"
                         }
                     },
                     "401": {
-                        "description": "Unauthorized"
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "422": {
+                        "description": "Auth failed",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "summary": "Existing user login",
+                "description": "Login for existing user",
+                "tags": [
+                    "User and Authentication"
+                ],
+                "operationId": "loginUser",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "description": "Credentials to use",
+                        "schema": {
+                            "$ref": "#/definitions/userlogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userinformationandtoken"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "422": {
+                        "description": "Auth failed",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "summary": "Get all users",
+                "description": "Gets users' details",
+                "tags": [
+                    "User Information"
+                ],
+                "security": [
+                    {
+                        "Token": []
+                    }
+                ],
+                "operationId": "getAllUsers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userinformations"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "422": {
+                        "description": "Auth failed",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create new user",
+                "description": "Creating a new user by registering",
+                "operationId": "createUser",
+                "tags": [
+                    "User and Authentication"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "description": "information of the new user",
+                        "schema": {
+                            "$ref": "#/definitions/usercreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userinformationandtoken"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "422": {
+                        "description": "Auth failed",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{username}": {
+            "get": {
+                "summary": "Get User Information",
+                "description": "Get information of the user",
+                "tags": [
+                    "User Information"
+                ],
+                "operationId": "getUserByUsername",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "descriptions": "",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userinformation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "422": {
+                        "description": "Auth failed",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Edit User Information",
+                "description": "Edit information of the user",
+                "tags": [
+                    "User Information"
+                ],
+                "operationId": "editUserDetails",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "descriptions": "",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userinformation"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    },
+                    "422": {
+                        "description": "Auth failed",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete User Information",
+                "description": "Delete user",
+                "tags": [
+                    "User Information"
+                ],
+                "operationId": "deleteUserByUsername",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "descriptions": "",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/message"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/error"
+                        }
                     },
                     "422": {
                         "description": "Auth failed",
@@ -67,10 +293,104 @@
         }
     },
     "definitions": {
+        "userlogin": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "username",
+                "password"
+            ]
+        },
+        "usercreate": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "commentary": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "username",
+                "password"
+            ]
+        },
+        "userinformation": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "commentary": {
+                    "type": "string"
+                },
+                "roleName": {
+                    "type": "string"
+                }
+            }
+        },
+        "userinformationandtoken": {
+            "type": "object",
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "commentary": {
+                    "type": "string"
+                },
+                "roleName": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "userinformations": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/userinformation"
+                    }
+                }
+            },
+            "required": [
+                "users"
+            ]
+        },
+        "message": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "message"
+            ]
+        },
         "error": {
-            "type": "array",
-            "items": {
-                "type": "string"
+            "type": "object",
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
             },
             "required": [
                 "error"

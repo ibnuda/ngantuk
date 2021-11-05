@@ -13,5 +13,5 @@ just spending time watching my kid right beside me while typing on my computer.
 username: `admin`
 password: `masuk`
 
-## Review
+## Remarks
 javascript is not fun to work with.
