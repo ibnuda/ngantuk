@@ -1,8 +1,8 @@
 const { Sequelize } = require('sequelize')
 
-const sequelize = new Sequelize('ngantuk', 'iaji', 'jaran', {
+const sequelize = new Sequelize('ngantuk', 'iaji', null, {
     dialect: 'postgres',
-    host: 'postgres',
+    host: 'postgres-ngantuk',
     logging: false,
     port: 5432,
     dialectOptions: {}
@@ -10,6 +10,7 @@ const sequelize = new Sequelize('ngantuk', 'iaji', 'jaran', {
 
 const checkConnection = async () => {
     try {
+        console.log('trying to connect');
         await sequelize.authenticate();
         console.log('connected to db');
     } catch (error) {

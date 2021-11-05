@@ -2,6 +2,7 @@ version: "3"
 services:
   api:
     image: ngantuk
+    container_name: ngantuk
     ports:
       - 3000:3000
     links:
@@ -10,11 +11,10 @@ services:
       - postgres
   postgres:
     image: postgres:13.4-alpine
+    container_name: postgres-ngantuk
     ports:
       - 5432:5432
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=iaji
-      - POSTGRES_PASSWORD=jaran
       - POSTGRES_DB=ngantuk
+      - POSTGRES_HOST_AUTH_METHOD=trust
